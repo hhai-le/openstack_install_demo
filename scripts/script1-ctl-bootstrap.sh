@@ -5,12 +5,12 @@ apt install crudini -y
 install_rabbitmq() {
 	echo "Installing RabbitMQ Server"
     apt install rabbitmq-server -y
-    rabbitmqctl add_user openstack RABBIT_PASS
+    rabbitmqctl add_user openstack $RABBIT_PASS
     rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 }
 install_memcached () {
 	echo "Install Memcached"
-	apt-get install memcached python-memcache -y
+	apt-get install memcached -y
 	MEMCAHCEFILE=/etc/memcached.conf
 	sed -i "s/-l 127.0.0.1/-l $HOST_CTL_IP/" $MEMCAHCEFILE
 	service memcached restart
