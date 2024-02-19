@@ -22,6 +22,7 @@ install_mysql(){
     crudini --set /etc/mysql/mariadb.conf.d/50-server.cnf mysqld max_connections 500
     crudini --set /etc/mysql/mariadb.conf.d/50-server.cnf mysqld character-set-server utf8mb4
     crudini --set /etc/mysql/mariadb.conf.d/50-server.cnf mysqld collation-server utf8mb4_general_ci
+    service mariadb service
 }
 install_rabbitmq
 install_memcached
