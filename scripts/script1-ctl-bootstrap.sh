@@ -16,7 +16,7 @@ install_memcached () {
 	service memcached restart
 } 
 install_mysql(){
-	echocolor "Install MariaDB Server"
+	echo "Install MariaDB Server"
     apt install -y mariadb-server python3-pymysql
     crudini --set /etc/mysql/mariadb.conf.d/50-server.cnf mysqld bind-address $HOST_CTL_IP
     crudini --set /etc/mysql/mariadb.conf.d/50-server.cnf mysqld max_connections 500

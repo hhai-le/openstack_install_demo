@@ -23,26 +23,30 @@ keystone_create_db () {
 EOF
 }
 keystone_install () {
+	echo "Installing keystone packages"
     apt -y install keystone python3-openstackclient apache2 libapache2-mod-wsgi-py3 python3-oauth2client
 }
 keystone_config () {
+	echo "Updating keystone config"
 	keystonefile=/etc/keystone/keystone.conf
 	keystonefilebak=/etc/keystone/keystone.conf.bak
 	cp $keystonefile  $keystonefilebak
 	egrep -v "^ *#|^$" $keystonefilebak > $keystonefile
-	crudini --set $keystonefile 
 	crudini --set $keystonefile database connection mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone
 	crudini --set $keystonefile token provider fernet
 }
 keystone_populate_db () {
+	echo "DB Synchronize"
 	su -s /bin/sh -c "keystone-manage db_sync" keystone
 }
 keystone_initialize_key () {
+	echo "Keystone initial"
 	keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 	keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 }
 	
 keystone_bootstrap () {
+	echo "keystone bootstrapping"
 	keystone-manage bootstrap --bootstrap-password $ADMIN_PASS --bootstrap-admin-url http://$HOST_CTL:5000/v3/ --bootstrap-internal-url http://$HOST_CTL:5000/v3/ --bootstrap-public-url http://$HOST_CTL:5000/v3/ --bootstrap-region-id RegionOne
 }
 keystone_config_apache () {
