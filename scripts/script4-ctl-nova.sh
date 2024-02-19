@@ -129,7 +129,7 @@ placement_config() {
 	crudini --set $placementfile keystone_authtoken username placement
 	crudini --set $placementfile keystone_authtoken password $PLACEMENT_PASS
 	crudini --set $placementfile keystone_authtoken insecure false
-	crudini --set $placementfile connection mysql+pymysql://placement:$PLACEMENT_DBPASS@$HOST_CTL/placement
+	crudini --set $placementfile placement_database connection mysql+pymysql://placement:$PLACEMENT_DBPASS@$HOST_CTL/placement
 
 	chmod 640 $placementfile
 	chown root:nova $placementfile
