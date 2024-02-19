@@ -65,11 +65,9 @@ keystone_create_domain_project_user_role () {
 	
 	echo "Create domain, projects, users and roles"
 	openstack project create --domain default --description "Service Project" service
-	  
 	openstack project create --domain default --description "Demo Project" demo
 	openstack user create --domain default --password $DEMO_PASS demo
-	openstack role create user
-	openstack role add --project demo --user demo user
+	openstack role add --project demo --user demo demo
 }
 # Function create OpenStack client environment scripts
 keystone_create_opsclient_scripts () {
@@ -103,6 +101,7 @@ keystone_verify () {
 	source /root/admin-openrc
 	openstack token issue
 }
+
 keystone_create_db
 keystone_install
 keystone_config
