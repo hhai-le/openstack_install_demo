@@ -119,8 +119,8 @@ placement_config() {
 	egrep -v "^ *#|^$" $placementfilebak > $placementfile
 	crudini --set $placementfile DEFAULT debug false
 	crudini --set $placementfile api auth_strategy keystone
-	crudini --set $placementfile keystone_authtoken www_authenticate_uri htpp://$HOST_CTL:5000
-	crudini --set $placementfile keystone_authtoken auth_url htpp://$HOST_CTL:5000
+	crudini --set $placementfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
+	crudini --set $placementfile keystone_authtoken auth_url http://$HOST_CTL:5000
 	crudini --set $placementfile keystone_authtoken memcached_servers $HOST_CTL:11211
 	crudini --set $placementfile keystone_authtoken auth_type password
 	crudini --set $placementfile keystone_authtoken project_domain_name default
