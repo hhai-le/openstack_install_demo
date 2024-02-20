@@ -69,9 +69,6 @@ keystone_create_domain_project_user_role () {
 	
 	echo "Create domain, projects, users and roles"
 	openstack project create --domain default --description "Service Project" service
-	openstack project create --domain default --description "Demo Project" demo
-	openstack user create --domain default --password $DEMO_PASS demo
-	openstack role add --project demo --user demo demo
 }
 # Function create OpenStack client environment scripts
 keystone_create_opsclient_scripts () {
@@ -82,22 +79,11 @@ export OS_USER_DOMAIN_NAME=Default
 export OS_PROJECT_NAME=admin
 export OS_USERNAME=admin
 export OS_PASSWORD=$ADMIN_PASS
-export OS_AUTH_URL=http://$HOST_CTL:35357/v3
-export OS_IDENTITY_API_VERSION=3
-export OS_IMAGE_API_VERSION=2
-EOF
-	chmod +x /root/admin-openrc
-	cat << EOF > /root/demo-openrc
-export OS_PROJECT_DOMAIN_NAME=Default
-export OS_USER_DOMAIN_NAME=Default
-export OS_PROJECT_NAME=demo
-export OS_USERNAME=demo
-export OS_PASSWORD=$DEMO_PASS
 export OS_AUTH_URL=http://$HOST_CTL:5000/v3
 export OS_IDENTITY_API_VERSION=3
 export OS_IMAGE_API_VERSION=2
 EOF
-	chmod +x /root/demo-openrc
+	chmod +x /root/admin-openrc
 }
 # Function verifying keystone
 keystone_verify () {
