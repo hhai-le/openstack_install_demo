@@ -83,7 +83,7 @@ nova_config () {
 	crudini --set $novafile api auth_strategy keystone
 	crudini --set $novafile glance api_servers http://$HOST_CTL:9292
 	crudini --set $novafile oslo_concurrency lock_path $state_path/tmp
-	crudini --set $novafile glance connection mysql+pymysql://nova:$NOVA_DBPASS@$HOST_CTL/nova_api
+	crudini --set $novafile database connection mysql+pymysql://nova:$NOVA_DBPASS@$HOST_CTL/nova
 	crudini --set $novafile api_database connection mysql+pymysql://nova:$NOVA_DBPASS@$HOST_CTL/nova_api
 	crudini --set $novafile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
 	crudini --set $novafile keystone_authtoken auth_url http://$HOST_CTL:5000
