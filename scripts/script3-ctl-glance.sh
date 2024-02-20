@@ -28,7 +28,7 @@ glance_config () {
 	crudini --set $glancefile glance_store stores file,http
 	crudini --set $glancefile glance_store default_store file
 	crudini --set $glancefile glance_store filesystem_store_datadir /var/lib/glance/images/
-	crudini --set $glancefile DEFAULT bind_host 127.0.0.1
+	crudini --set $glancefile DEFAULT bind_host $HOST_CTL_IP
 	crudini --set $glancefile DEFAULT transport_url rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
 	
 	crudini --set $glancefile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
