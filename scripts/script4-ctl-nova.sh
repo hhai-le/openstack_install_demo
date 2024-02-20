@@ -149,8 +149,6 @@ placement_nova_service() {
 }
 
 
-
-
 nova_create_db 
 nova_api_create_db 
 placement_create_db 
