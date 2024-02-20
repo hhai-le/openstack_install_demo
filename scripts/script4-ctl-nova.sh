@@ -34,8 +34,8 @@ EOF
 nova_api_create_db () {
 	cat << EOF | mysql
 CREATE DATABASE nova_api;
-GRANT ALL PRIVILEGES ON glance.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
-GRANT ALL PRIVILEGES ON glance.* TO 'nova'@'%' IDENTIFIED BY '$NOVA_DBPASS';
+GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
+GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY '$NOVA_DBPASS';
 EOF
 }
 
