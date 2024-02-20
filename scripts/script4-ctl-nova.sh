@@ -132,7 +132,7 @@ placement_config() {
 	crudini --set $placementfile placement_database connection mysql+pymysql://placement:$PLACEMENT_DBPASS@$HOST_CTL/placement
 
 	chmod 640 $placementfile
-	chown root:nova $placementfile
+	chown root:placement $placementfile
 }
 
 placement_nova_db_sync() {
