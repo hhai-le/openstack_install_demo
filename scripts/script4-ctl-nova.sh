@@ -72,20 +72,19 @@ nova_config () {
 	novafilebak=/etc/nova/nova.conf.bak
 	cp $novafile  $novafilebak
 	egrep -v "^ *#|^$" $novafilebak > $novafile
-	crudini --set $novafile  DEFAULT osapi_compute_listen 127.0.0.1
-	crudini --set $novafile  DEFAULT osapi_compute_listen_port 8774
-	crudini --set $novafile  DEFAULT metadata_listen 127.0.0.1
-	crudini --set $novafile  DEFAULT metadata_listen_port 8775
-	crudini --set $novafile  DEFAULT state_path /var/lib/nova
-	crudini --set $novafile  DEFAULT enabled_apis osapi_compute,metadata
-	crudini --set $novafile  DEFAULT log_dir /var/log/nova
-	crudini --set $novafile  DEFAULT transport_url rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
-
+	crudini --set $novafile DEFAULT osapi_compute_listen 127.0.0.1
+	crudini --set $novafile DEFAULT osapi_compute_listen_port 8774
+	crudini --set $novafile DEFAULT metadata_listen 127.0.0.1
+	crudini --set $novafile DEFAULT metadata_listen_port 8775
+	crudini --set $novafile DEFAULT state_path /var/lib/nova
+	crudini --set $novafile DEFAULT enabled_apis osapi_compute,metadata
+	crudini --set $novafile DEFAULT log_dir /var/log/nova
+	crudini --set $novafile DEFAULT transport_url rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
 	crudini --set $novafile api auth_strategy keystone
-	crudini --set $novafile glance api_servers http://dlp.srv.world:9292
+	crudini --set $novafile glance api_servers http://$HOST_CTL:9292
 	crudini --set $novafile oslo_concurrency lock_path $state_path/tmp
 	crudini --set $novafile glance connection mysql+pymysql://nova:$NOVA_DBPASS@$HOST_CTL/nova_api
-	crudini --set $novafile database connection mysql+pymysql://nova:$NOVA_DBPASS@$HOST_CTL/nova
+	crudini --set $novafile api_database connection mysql+pymysql://nova:$NOVA_DBPASS@$HOST_CTL/nova_api
 	crudini --set $novafile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
 	crudini --set $novafile keystone_authtoken auth_url http://$HOST_CTL:5000
 	crudini --set $novafile keystone_authtoken memcached_servers $HOST_CTL:11211
