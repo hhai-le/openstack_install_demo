@@ -163,16 +163,15 @@ placement_nova_service() {
 	systemctl enable nova-api nova-conductor nova-scheduler nova-novncproxy
 }
 
-
+nova_install
+kvm_install
+compute_install
 nova_create_db 
 nova_api_create_db 
 placement_create_db 
 nova_create_domain_project_user_role
 placement_create_domain_project_user_role
 cell_create_db 
-kvm_install
-nova_install
-compute_install
 nova_config 
 placement_config
 placement_nova_db_sync
