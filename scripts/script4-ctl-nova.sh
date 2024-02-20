@@ -42,8 +42,8 @@ EOF
 placement_create_db () {
 	cat << EOF | mysql
 CREATE DATABASE placement;
-GRANT ALL PRIVILEGES ON placement.* TO 'glance'@'localhost' IDENTIFIED BY '$PLACEMENT_DBPASS';
-GRANT ALL PRIVILEGES ON placement.* TO 'glance'@'%' IDENTIFIED BY '$PLACEMENT_DBPASS';
+GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'localhost' IDENTIFIED BY '$PLACEMENT_DBPASS';
+GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%' IDENTIFIED BY '$PLACEMENT_DBPASS';
 EOF
 }
 
