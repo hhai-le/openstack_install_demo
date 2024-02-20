@@ -56,7 +56,6 @@ nova_config () {
 	chown root:nova $novafile
 }
 
-
 nova_install
 compute_install
 nova_config
