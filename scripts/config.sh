@@ -1,6 +1,7 @@
 #!/bin/bash
 HOST_CTL_IP="192.168.86.136"
 HOST_CTL="openstack-1"
+HOST_COM_IP="192.168.86.137"
 MYSQL_PASS="admin"
 KEYSTONE_PASS="admin"
 KEYSTONE_DBPASS="admin"
