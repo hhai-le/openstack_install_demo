@@ -121,7 +121,7 @@ neutron_nova_conf () {
 	novafile=/etc/nova/nova.conf
 	crudini --set DEFAULT vif_plugging_is_fatal True
 	crudini --set DEFAULT vif_plugging_timeout 300
-	
+
 	crudini --set $novafile neutron auth_url http://$HOST_CTL:5000
 	crudini --set $novafile neutron auth_type password
 	crudini --set $novafile neutron project_domain_name default
@@ -140,3 +140,4 @@ neutron_install
 neutron_config
 neutron_ml2_ini
 openvswitch_switch
+neutron_nova_conf
