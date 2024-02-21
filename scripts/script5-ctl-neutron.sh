@@ -159,12 +159,14 @@ neutron_initial () {
 }
 
 
+
+
 neutron_create_domain_project_user_role
-neutron_db_create
+neutron_db_create 
 neutron_install
-neutron_config
-neutron_ml2_ini
+neutron_config 
+neutron_ml2_ini 
 neutron_ovn_metadata_agent
-openvswitch_switch
-neutron_nova_conf
-neutron_initial
+openvswitch_switch 
+neutron_nova_conf 
+neutron_initial 
