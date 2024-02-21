@@ -86,9 +86,11 @@ neutron_ml2_ini () {
 	crudini --set $neutronini ml2 mechanism_drivers ovn
 	crudini --set $neutronini ml2 extension_drivers port_security
 	crudini --set $neutronini ml2 overlay_ip_version 4
+
 	crudini --set $neutronini ml2_type_geneve vni_ranges 1:65536
 	crudini --set $neutronini ml2_type_geneve max_header_size 38
-	crudini --set $neutronini ml2_type_flat flat_networks *
+	
+	crudini --set $neutronini ml2_type_flat flat_networks \*
 
 	crudini --set $neutronini securitygroup enable_security_group True
 	crudini --set $neutronini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
