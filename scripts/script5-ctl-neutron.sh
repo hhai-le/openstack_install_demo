@@ -44,8 +44,8 @@ neutron_config () {
 	crudini --set $neutronfile DEFAULT notify_nova_on_port_data_changes True
 	crudini --set $neutronfile DEFAULT transport_url rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
 
-	crudini --set $neutronfile keystone_authtoken www_authenticate_uri https://$HOST_CTL:5000
-	crudini --set $neutronfile keystone_authtoken auth_url https://$HOST_CTL:5000
+	crudini --set $neutronfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
+	crudini --set $neutronfile keystone_authtoken auth_url http://$HOST_CTL:5000
 	crudini --set $neutronfile keystone_authtoken memcached_servers $HOST_CTL:11211
 	crudini --set $neutronfile keystone_authtoken auth_type password
 	crudini --set $neutronfile keystone_authtoken project_domain_name default
@@ -56,7 +56,7 @@ neutron_config () {
 
 	crudini --set $neutronfile database connection mysql+pymysql://neutron:$NEUTRON_DBPASS@$HOST_CTL/neutron
 
-	crudini --set $neutronfile nova auth_url https://$HOST_CTL:5000
+	crudini --set $neutronfile nova auth_url http://$HOST_CTL:5000
 	crudini --set $neutronfile nova auth_type password
 	crudini --set $neutronfile nova project_domain_name default
 	crudini --set $neutronfile nova user_domain_name default
