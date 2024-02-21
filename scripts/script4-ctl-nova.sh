@@ -93,8 +93,8 @@ nova_config () {
 	crudini --set $novafile api auth_strategy keystone
 
 	crudini --set $novafile vnc enabled True
-	crudini --set $novafile server_listen $HOST_CTL_IP
-	crudini --set $novafile server_proxyclient_address $HOST_CTL_IP
+	crudini --set $novafile vnc server_listen $HOST_CTL_IP
+	crudini --set $novafile vnc server_proxyclient_address $HOST_CTL_IP
 	crudini --set $novafile vnc novncproxy_host $HOST_CTL_IP
 	crudini --set $novafile vnc novncproxy_port 6080
 	crudini --set $novafile vnc novncproxy_base_url http://$HOST_CTL:6080/vnc_auto.html
