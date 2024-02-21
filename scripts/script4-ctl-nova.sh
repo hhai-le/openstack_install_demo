@@ -3,6 +3,7 @@
 source config.sh
 
 nova_create_domain_project_user_role() {
+	echo "create nova user"
 	source /root/admin-openrc
 	openstack user create --domain default --project service --password $NOVA_PASS nova
 	openstack role add --project service --user nova admin
@@ -13,6 +14,7 @@ nova_create_domain_project_user_role() {
 }
 
 placement_create_domain_project_user_role() {
+	echo "create placement user"
 	source /root/admin-openrc
 	openstack user create --domain default --project service --password $PLACEMENT_PASS placement
 	openstack role add --project service --user placement admin
@@ -24,6 +26,7 @@ placement_create_domain_project_user_role() {
 
 
 nova_create_db () {
+	echo "create nova DB"
 	cat << EOF | mysql
 CREATE DATABASE nova;
 GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
@@ -32,6 +35,7 @@ EOF
 }
 
 nova_api_create_db () {
+	echo "create nova api db"
 	cat << EOF | mysql
 CREATE DATABASE nova_api;
 GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
@@ -40,6 +44,7 @@ EOF
 }
 
 placement_create_db () {
+	echo "create placement db"
 	cat << EOF | mysql
 CREATE DATABASE placement;
 GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'localhost' IDENTIFIED BY '$PLACEMENT_DBPASS';
@@ -48,6 +53,7 @@ EOF
 }
 
 cell_create_db () {
+	echo "create cell db"
 	cat << EOF | mysql
 CREATE DATABASE nova_cell0;
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
@@ -56,10 +62,12 @@ EOF
 }
 
 nova_install() {
+	echo "create nova packages"
     apt -y install nova-api nova-conductor nova-scheduler nova-novncproxy placement-api python3-novaclient
 }
 
 kvm_install() {
+	echo "create KVM on machine"
 	apt -y install qemu-kvm libvirt-daemon-system libvirt-daemon virtinst bridge-utils libosinfo-bin
 }
 
@@ -68,6 +76,7 @@ compute_install() {
 }
 
 nova_config () {
+	echo "updating nova config"
 	novafile=/etc/nova/nova.conf
 	novafilebak=/etc/nova/nova.conf.bak
 	cp $novafile  $novafilebak
@@ -125,6 +134,7 @@ nova_config () {
 
 
 placement_config() {
+	echo "update placement config"
 	placementfile=/etc/placement/placement.conf
 	placementfilebak=/etc/placement/placement.conf.bak
 	cp $placementfile  $placementfilebak
@@ -151,6 +161,7 @@ placement_config() {
 
 
 placement_nova_db_sync() {
+	echo "nova db synchronize"
 	su -s /bin/bash placement -c "placement-manage db sync"
 	su -s /bin/bash nova -c "nova-manage api_db sync"
 	su -s /bin/bash nova -c "nova-manage cell_v2 map_cell0"
@@ -160,6 +171,7 @@ placement_nova_db_sync() {
 
 
 placement_nova_service() {
+	echo "nova service restart"
 	systemctl restart nova-api nova-conductor nova-scheduler nova-novncproxy
 	systemctl enable nova-api nova-conductor nova-scheduler nova-novncproxy
 }

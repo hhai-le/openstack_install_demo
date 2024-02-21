@@ -3,11 +3,13 @@
 source config.sh
 
 nova_kvm_install() {
+	echo "install kvm nova packages"
     apt -y install nova-compute nova-compute-kvm qemu-kvm libvirt-daemon-system libvirt-daemon virtinst bridge-utils libosinfo-bin qemu-system-data
 }
 
 
 nova_config () {
+	echo "update nova config"
 	novafile=/etc/nova/nova.conf
 	novafilebak=/etc/nova/nova.conf.bak
 	cp $novafile  $novafilebak
@@ -57,6 +59,7 @@ nova_config () {
 }
 
 nova_service () {
+	echo "nova service restart"
 	systemctl restart nova-compute
 }
 

@@ -3,10 +3,12 @@
 source config.sh
 
 neutron_install() {
+	echo "install neutron packages"
 	apt -y install neutron-server neutron-plugin-ml2 neutron-ovn-metadata-agent python3-neutronclient ovn-central ovn-host openvswitch-switch
 }
 
 neutron_create_domain_project_user_role() {
+	echo "create neutron user, role"
 	openstack user create --domain default --project service --password $NEUTRON_PASS neutron
 	openstack role add --project service --user neutron admin
 	openstack service create --name neutron --description "OpenStack Networking service" network
@@ -16,6 +18,7 @@ neutron_create_domain_project_user_role() {
 }
 
 neutron_db_create () {
+	echo "create neutron DB"
 	cat << EOF | mysql
 	create database neutron;
 	grant all privileges on neutron.* to neutron@'localhost' identified by '$NEUTRON_DBPASS'; 
@@ -24,6 +27,7 @@ EOF
 }
 
 neutron_config () {
+	echo "update neutron config"
 	neutronfile=/etc/neutron/neutron.conf 
 	neutronfilebak=/etc/neutron/neutron.conf.bak
 	cp $neutronfile  $neutronfilebak
@@ -69,6 +73,7 @@ neutron_config () {
 
 
 neutron_ml2_ini () {
+	echo "update neutron ml2 config"
 	neutronini=/etc/neutron/plugins/ml2/ml2_conf.ini 
 	neutroninibak=/etc/neutron/plugins/ml2/ml2_conf.ini.bak
 	cp $neutronini  $neutroninibak
@@ -97,6 +102,7 @@ neutron_ml2_ini () {
 }
 
 neutron_ovn_metadata_agent() {
+	echo "update neutron metadata agent"
 	neutron_ovn_agent=/etc/neutron/neutron_ovn_metadata_agent.ini
 	neutron_ovn_agentbak=/etc/neutron/neutron_ovn_metadata_agent.ini.bak
 	cp $neutron_ovn_agent  $neutron_ovn_agentbak
@@ -114,10 +120,12 @@ neutron_ovn_metadata_agent() {
 }
 
 openvswitch_switch () {
+	echo "update openvswitch config"
 	sed -i 's/# OVS_CTL_OPTS=/OVS_CTL_OPTS="--ovsdb-server-options='--remote=ptcp:6640:127.0.0.1'"/' /etc/default/openvswitch-switch
 }
 
 neutron_nova_conf () {
+	echo "update neutron setting in nova config file"
 	novafile=/etc/nova/nova.conf
 	crudini --set DEFAULT vif_plugging_is_fatal True
 	crudini --set DEFAULT vif_plugging_timeout 300
