@@ -2,6 +2,7 @@
 source config.sh
 
 glance_create_db () {
+	echo "create Glance database"
 	cat << EOF | mysql
 CREATE DATABASE glance;
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY '$GLANCE_DBPASS';
@@ -10,6 +11,7 @@ EOF
 }
 
 glance_create_domain_project_user_role () {
+	echo "Create project, user role"
 	source /root/admin-openrc
 	openstack user create --domain default --project service --password $GLANCE_PASS glance
 	openstack role add --project service --user glance admin
@@ -20,6 +22,7 @@ glance_create_domain_project_user_role () {
 }
 
 glance_config () {
+	echo "Updating glance config"
 	glancefile=/etc/glance/glance-api.conf
 	glancefilebak=/etc/glance/glance-api.conf.bak
 	cp $glancefile  $glancefilebak
@@ -51,14 +54,17 @@ glance_config () {
 
 
 glance_install() {
+	echo "install glance packages"
 	apt -y install glance
 }
 
 glance_db_sync() {
+	echo "glance db synchronize"
 	su -s /bin/bash glance -c "glance-manage db_sync"
 }
 
 glance_service() {
+	echo "restart glance api service"
 	systemctl restart glance-api
 	systemctl enable glance-api
 }
