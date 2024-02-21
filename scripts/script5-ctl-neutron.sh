@@ -69,7 +69,7 @@ neutron_config () {
 	crudini --set $neutronfile oslo_policy enforce_new_defaults true
 	
 	chmod 640 $neutronfile
-	chown root:nova $neutronfile
+	chown root:neutron $neutronfile
 }
 
 
@@ -99,7 +99,7 @@ neutron_ml2_ini () {
 	crudini --set $neutronini ovn ovn_metadata_enabled True
 
 	chmod 640 $neutronini
-	chown root:nova $neutronini
+	chown root:neutron $neutronini
 }
 
 neutron_ovn_metadata_agent() {
@@ -122,7 +122,7 @@ neutron_ovn_metadata_agent() {
 
 openvswitch_switch () {
 	echo "update openvswitch config"
-	sed -i 's/# OVS_CTL_OPTS=/OVS_CTL_OPTS="--ovsdb-server-options='--remote=ptcp:6640:127.0.0.1'"/' /etc/default/openvswitch-switch
+	sed -i 's/# OVS_CTL_OPTS=/OVS_CTL_OPTS="--ovsdb-server-options='--remote=ptcp:6640:$HOST_CTL_IP'"/' /etc/default/openvswitch-switch
 }
 
 neutron_nova_conf () {
