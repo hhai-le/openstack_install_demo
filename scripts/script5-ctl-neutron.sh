@@ -143,6 +143,22 @@ neutron_nova_conf () {
 	crudini --set $novafile neutron metadata_proxy_shared_secret $metadata_secret
 }
 
+neutron_initial () {
+	echo "neutron initial"
+	systemctl restart openvswitch-switch
+	ovs-vsctl add-br br-int
+	ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+	su -s /bin/bash neutron -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head"
+	systemctl restart ovn-central ovn-northd ovn-controller ovn-host
+	ovn-nbctl set-connection ptcp:6641:$HOST_CTL_IP -- set connection . inactivity_probe=60000
+	ovn-sbctl set-connection ptcp:6642:$HOST_CTL_IP -- set connection . inactivity_probe=60000
+	ovs-vsctl set open . external-ids:ovn-remote=tcp:$HOST_CTL_IP:6642
+	ovs-vsctl set open . external-ids:ovn-encap-type=geneve
+	ovs-vsctl set open . external-ids:ovn-encap-ip=$HOST_CTL_IP
+	systemctl restart neutron-server neutron-ovn-metadata-agent nova-api nova-compute
+}
+
+
 neutron_create_domain_project_user_role
 neutron_db_create
 neutron_install
