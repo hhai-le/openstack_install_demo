@@ -102,24 +102,41 @@ neutron_ovn_metadata_agent() {
 	cp $neutron_ovn_agent  $neutron_ovn_agentbak
 	egrep -v "^ *#|^$" $neutron_ovn_agentbak > $neutron_ovn_agent
 
-	crudini --set neutron_ovn_agent DEFAULT nova_metadata_host $HOST_CTL
-	crudini --set neutron_ovn_agent DEFAULT nova_metadata_protocol http
-	crudini --set neutron_ovn_agent DEFAULT metadata_proxy_shared_secret metadata_secret
+	crudini --set $neutron_ovn_agent DEFAULT nova_metadata_host $HOST_CTL
+	crudini --set $neutron_ovn_agent DEFAULT nova_metadata_protocol http
+	crudini --set $neutron_ovn_agent DEFAULT metadata_proxy_shared_secret $metadata_secret
 
-	crudini --set neutron_ovn_agent ovs ovsdb_connectiontcp:127.0.0.1:6640
+	crudini --set $neutron_ovn_agent ovs ovsdb_connectiontcp:127.0.0.1:6640
 
-	crudini --set neutron_ovn_agent agent root_helpersudo neutron-rootwrap /etc/neutron/rootwrap.conf
+	crudini --set $neutron_ovn_agent agent root_helpersudo neutron-rootwrap /etc/neutron/rootwrap.conf
 	
-	crudini --set neutron_ovn_agent ovn ovn_sb_connectiontcp:$HOST_CTL_IP:6642
+	crudini --set $neutron_ovn_agent ovn ovn_sb_connectiontcp:$HOST_CTL_IP:6642
 }
 
-#openvswitch_switch () {
-#	
-#}
+openvswitch_switch () {
+	sed -i 's/# OVS_CTL_OPTS=/OVS_CTL_OPTS="--ovsdb-server-options='--remote=ptcp:6640:127.0.0.1'"/' /etc/default/openvswitch-switch
+}
 
+neutron_nova_conf () {
+	novafile=/etc/nova/nova.conf
+	crudini --set DEFAULT vif_plugging_is_fatal True
+	crudini --set DEFAULT vif_plugging_timeout 300
+	
+	crudini --set $novafile neutron auth_url http://$HOST_CTL:5000
+	crudini --set $novafile neutron auth_type password
+	crudini --set $novafile neutron project_domain_name default
+	crudini --set $novafile neutron user_domain_name default
+	crudini --set $novafile neutron region_name RegionOne
+	crudini --set $novafile neutron project_name service
+	crudini --set $novafile neutron username neutron
+	crudini --set $novafile neutron password $NEUTRON_PASS
+	crudini --set $novafile neutron service_metadata_proxy True
+	crudini --set $novafile neutron metadata_proxy_shared_secret $metadata_secret
+}
 
 neutron_create_domain_project_user_role
 neutron_db_create
 neutron_install
 neutron_config
 neutron_ml2_ini
+openvswitch_switch
