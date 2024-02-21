@@ -8,6 +8,7 @@ neutron_install() {
 }
 
 neutron_create_domain_project_user_role() {
+	source /root/admin-openrc
 	echo "create neutron user, role"
 	openstack user create --domain default --project service --password $NEUTRON_PASS neutron
 	openstack role add --project service --user neutron admin
