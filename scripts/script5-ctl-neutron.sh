@@ -113,11 +113,11 @@ neutron_ovn_metadata_agent() {
 	crudini --set $neutron_ovn_agent DEFAULT nova_metadata_protocol http
 	crudini --set $neutron_ovn_agent DEFAULT metadata_proxy_shared_secret $metadata_secret
 
-	crudini --set $neutron_ovn_agent ovs ovsdb_connectiontcp:$HOST_CTL_IP:6640
+	crudini --set $neutron_ovn_agent ovs ovsdb_connection tcp:$HOST_CTL_IP:6640
 
 	crudini --set $neutron_ovn_agent agent root_helpersudo neutron-rootwrap /etc/neutron/rootwrap.conf
 	
-	crudini --set $neutron_ovn_agent ovn ovn_sb_connectiontcp:$HOST_CTL_IP:6642
+	crudini --set $neutron_ovn_agent ovn ovn_sb_connection tcp:$HOST_CTL_IP:6642
 }
 
 openvswitch_switch () {
