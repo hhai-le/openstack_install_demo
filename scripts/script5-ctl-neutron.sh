@@ -21,9 +21,9 @@ neutron_create_domain_project_user_role() {
 neutron_db_create () {
 	echo "create neutron DB"
 	cat << EOF | mysql
-	create database neutron;
-	grant all privileges on neutron.* to neutron@'localhost' identified by '$NEUTRON_DBPASS'; 
-	grant all privileges on neutron.* to neutron@'%' identified by '$NEUTRON_DBPASS'; 
+	create database neutron_ml2;
+	grant all privileges on neutron_ml2.* to neutron@'localhost' identified by '$NEUTRON_DBPASS'; 
+	grant all privileges on neutron_ml2.* to neutron@'%' identified by '$NEUTRON_DBPASS'; 
 EOF
 }
 
@@ -54,7 +54,7 @@ neutron_config () {
 	crudini --set $neutronfile keystone_authtoken username neutron
 	crudini --set $neutronfile keystone_authtoken password $NEUTRON_PASS
 
-	crudini --set $neutronfile database connection mysql+pymysql://neutron:$NEUTRON_DBPASS@$HOST_CTL/neutron
+	crudini --set $neutronfile database connection mysql+pymysql://neutron:$NEUTRON_DBPASS@$HOST_CTL/neutron_ml2
 
 	crudini --set $neutronfile nova auth_url http://$HOST_CTL:5000
 	crudini --set $neutronfile nova auth_type password
