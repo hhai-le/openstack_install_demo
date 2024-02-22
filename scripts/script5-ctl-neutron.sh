@@ -2,11 +2,6 @@
 
 source config.sh
 
-neutron_install() {
-	echo "install neutron packages"
-	apt -y install neutron-server neutron-plugin-ml2 neutron-ovn-metadata-agent python3-neutronclient ovn-central ovn-host openvswitch-switch
-}
-
 neutron_create_domain_project_user_role() {
 	source /root/admin-openrc
 	echo "create neutron user, role"
@@ -25,6 +20,11 @@ neutron_db_create () {
 	grant all privileges on neutron_ml2.* to neutron@'localhost' identified by '$NEUTRON_DBPASS'; 
 	grant all privileges on neutron_ml2.* to neutron@'%' identified by '$NEUTRON_DBPASS'; 
 EOF
+}
+
+neutron_install() {
+	echo "install neutron packages"
+	apt -y install neutron-server neutron-plugin-ml2 neutron-ovn-metadata-agent python3-neutronclient ovn-central ovn-host openvswitch-switch
 }
 
 neutron_config () {
@@ -120,6 +120,9 @@ neutron_ovn_metadata_agent() {
 	crudini --set $neutron_ovn_agent agent root_helpersudo neutron-rootwrap /etc/neutron/rootwrap.conf
 	
 	crudini --set $neutron_ovn_agent ovn ovn_sb_connection tcp:$HOST_CTL_IP:6642
+
+	chmod 640 $neutron_ovn_agent
+	chown root:neutron $neutron_ovn_agent
 }
 
 openvswitch_switch () {
@@ -143,6 +146,9 @@ neutron_nova_conf () {
 	crudini --set $novafile neutron password $NEUTRON_PASS
 	crudini --set $novafile neutron service_metadata_proxy True
 	crudini --set $novafile neutron metadata_proxy_shared_secret $metadata_secret
+
+	chmod 640 $novafile
+	chown root:nova $novafile
 }
 
 neutron_initial () {
