@@ -23,5 +23,3 @@ flat_allocation_pool_start="10.0.0.200"
 flat_allocation_pool_end="10.0.0.254"
 flat_gateway="10.0.0.1"
 flat_dns_nameserver="10.0.0.10"
-
-openstack subnet create subnet1 --network sharednet1 --project $projectID --subnet-range $flat_subnet_range --allocation-pool start=$flat_allocation_pool_start,end=$flat_allocation_pool_end --gateway $flat_gateway --dns-nameserver $flat_dns_nameserver
