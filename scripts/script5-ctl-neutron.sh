@@ -75,7 +75,7 @@ neutron_config () {
 
 neutron_ml2_ini () {
 	echo "update neutron ml2 config"
-	neutronini=/etc/neutron/plugins/ml2/ml2_conf.ini 
+	neutronini=/etc/neutron/plugins/ml2/ml2_conf.ini
 	neutroninibak=/etc/neutron/plugins/ml2/ml2_conf.ini.bak
 	cp $neutronini  $neutroninibak
 	egrep -v "^ *#|^$" $neutroninibak > $neutronini
@@ -117,7 +117,7 @@ neutron_ovn_metadata_agent() {
 
 	crudini --set $neutron_ovn_agent ovs ovsdb_connection tcp:$HOST_CTL_IP:6640
 
-	crudini --set $neutron_ovn_agent agent root_helpersudo neutron-rootwrap /etc/neutron/rootwrap.conf
+	crudini --set $neutron_ovn_agent agent root_helper sudo neutron-rootwrap /etc/neutron/rootwrap.conf
 	
 	crudini --set $neutron_ovn_agent ovn ovn_sb_connection tcp:$HOST_CTL_IP:6642
 

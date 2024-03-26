@@ -69,6 +69,15 @@ glance_service() {
 	systemctl enable glance-api
 }
 
+
+glance_image () {
+	wget http://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img
+	modprobe nbd
+	qemu-nbd --connect=/dev/nbd0 ubuntu-22.04-server-cloudimg-amd64.img
+	mount /dev/nbd0p1 /mnt
+	
+}
+
 glance_create_db
 glance_install
 glance_create_domain_project_user_role

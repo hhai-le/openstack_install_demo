@@ -34,10 +34,11 @@ keystone_config () {
 	egrep -v "^ *#|^$" $keystonefilebak > $keystonefile
 	crudini --set $keystonefile database connection mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone
 	crudini --set $keystonefile token provider fernet
+	crudini --set $keystonefile cache memcache_servers $HOST_CTL_IP:11211
 }
 keystone_populate_db () {
 	echo "DB Synchronize"
-	su -s /bin/sh -c "keystone-manage db_sync" keystone
+	su -s /bin/bash keystone -c "keystone-manage db_sync"
 }
 keystone_initialize_key () {
 	echo "Keystone initial"
