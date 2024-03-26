@@ -30,11 +30,63 @@ keystone_config () {
 	echo "Updating keystone config"
 	keystonefile=/etc/keystone/keystone.conf
 	keystonefilebak=/etc/keystone/keystone.conf.bak
-	cp $keystonefile  $keystonefilebak
-	egrep -v "^ *#|^$" $keystonefilebak > $keystonefile
-	crudini --set $keystonefile database connection mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone
-	crudini --set $keystonefile token provider fernet
-	crudini --set $keystonefile cache memcache_servers $HOST_CTL_IP:11211
+	mv $keystonefile $keystonefilebak
+cat > $keystonefile << EOF
+[DEFAULT]
+log_dir = /var/log/keystone
+[application_credential]
+[assignment]
+[auth]
+[cache]
+memcache_servers = $HOST_CTL_IP:11211
+[catalog]
+[cors]
+[credential]
+[database]
+connection = mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone
+[domain_config]
+[endpoint_filter]
+[endpoint_policy]
+[eventlet_server]
+[extra_headers]
+Distribution = Ubuntu
+[federation]
+[fernet_receipts]
+[fernet_tokens]
+[healthcheck]
+[identity]
+[identity_mapping]
+[jwt_tokens]
+[ldap]
+[memcache]
+[oauth1]
+[oslo_messaging_amqp]
+[oslo_messaging_kafka]
+[oslo_messaging_notifications]
+[oslo_messaging_rabbit]
+[oslo_middleware]
+[oslo_policy]
+[policy]
+[profiler]
+[receipt]
+[resource]
+[revoke]
+[role]
+[saml]
+[security_compliance]
+[shadow_users]
+[token]
+provider = fernet
+[tokenless_auth]
+[totp]
+[trust]
+[unified_limit]
+[wsgi]
+
+EOF
+	#crudini --set $keystonefile database connection mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone
+	#crudini --set $keystonefile token provider fernet
+	#crudini --set $keystonefile cache memcache_servers $HOST_CTL_IP:11211
 }
 keystone_populate_db () {
 	echo "DB Synchronize"

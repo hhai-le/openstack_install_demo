@@ -11,7 +11,7 @@ install_rabbitmq() {
 }
 install_memcached () {
 	echo "Install Memcached"
-	apt-get install memcached -y
+	apt install memcached -y
 	MEMCAHCEFILE=/etc/memcached.conf
 	sed -i "s/-l 127.0.0.1/-l $HOST_CTL_IP/" $MEMCAHCEFILE
 	service memcached restart

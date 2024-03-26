@@ -31,42 +31,45 @@ neutron_config () {
 	echo "update neutron config"
 	neutronfile=/etc/neutron/neutron.conf 
 	neutronfilebak=/etc/neutron/neutron.conf.bak
-	cp $neutronfile  $neutronfilebak
-	egrep -v "^ *#|^$" $neutronfilebak > $neutronfile
-	crudini --set $neutronfile DEFAULT bind_host $HOST_CTL_IP
-	crudini --set $neutronfile DEFAULT bind_port 9696
-	crudini --set $neutronfile DEFAULT core_plugin ml2
-	crudini --set $neutronfile DEFAULT service_plugins ovn-router
-	crudini --set $neutronfile DEFAULT auth_strategy keystone
-	crudini --set $neutronfile DEFAULT state_path /var/lib/neutron
-	crudini --set $neutronfile DEFAULT allow_overlapping_ips True
-	crudini --set $neutronfile DEFAULT notify_nova_on_port_status_changes True
-	crudini --set $neutronfile DEFAULT notify_nova_on_port_data_changes True
-	crudini --set $neutronfile DEFAULT transport_url rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
+	mv $neutronfile  $neutronfilebak
+	cat >> $neutronfile << EOF
 
-	crudini --set $neutronfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
-	crudini --set $neutronfile keystone_authtoken auth_url http://$HOST_CTL:5000
-	crudini --set $neutronfile keystone_authtoken memcached_servers $HOST_CTL:11211
-	crudini --set $neutronfile keystone_authtoken auth_type password
-	crudini --set $neutronfile keystone_authtoken project_domain_name default
-	crudini --set $neutronfile keystone_authtoken user_domain_name default
-	crudini --set $neutronfile keystone_authtoken project_name service
-	crudini --set $neutronfile keystone_authtoken username neutron
-	crudini --set $neutronfile keystone_authtoken password $NEUTRON_PASS
+EOF
 
-	crudini --set $neutronfile database connection mysql+pymysql://neutron:$NEUTRON_DBPASS@$HOST_CTL/neutron_ml2
-
-	crudini --set $neutronfile nova auth_url http://$HOST_CTL:5000
-	crudini --set $neutronfile nova auth_type password
-	crudini --set $neutronfile nova project_domain_name default
-	crudini --set $neutronfile nova user_domain_name default
-	crudini --set $neutronfile nova region_name RegionOne
-	crudini --set $neutronfile nova project_name service
-	crudini --set $neutronfile nova username nova
-	crudini --set $neutronfile nova password $NOVA_PASS
-
-	crudini --set $neutronfile oslo_concurrency lock_path \$state_path/tmp
-	crudini --set $neutronfile oslo_policy enforce_new_defaults true
+#	crudini --set $neutronfile DEFAULT bind_host $HOST_CTL_IP
+#	crudini --set $neutronfile DEFAULT bind_port 9696
+#	crudini --set $neutronfile DEFAULT core_plugin ml2
+#	crudini --set $neutronfile DEFAULT service_plugins ovn-router
+#	crudini --set $neutronfile DEFAULT auth_strategy keystone
+#	crudini --set $neutronfile DEFAULT state_path /var/lib/neutron
+#	crudini --set $neutronfile DEFAULT allow_overlapping_ips True
+#	crudini --set $neutronfile DEFAULT notify_nova_on_port_status_changes True
+#	crudini --set $neutronfile DEFAULT notify_nova_on_port_data_changes True
+#	crudini --set $neutronfile DEFAULT transport_url rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
+#
+#	crudini --set $neutronfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
+#	crudini --set $neutronfile keystone_authtoken auth_url http://$HOST_CTL:5000
+#	crudini --set $neutronfile keystone_authtoken memcached_servers $HOST_CTL:11211
+#	crudini --set $neutronfile keystone_authtoken auth_type password
+#	crudini --set $neutronfile keystone_authtoken project_domain_name default
+#	crudini --set $neutronfile keystone_authtoken user_domain_name default
+#	crudini --set $neutronfile keystone_authtoken project_name service
+#	crudini --set $neutronfile keystone_authtoken username neutron
+#	crudini --set $neutronfile keystone_authtoken password $NEUTRON_PASS
+#
+#	crudini --set $neutronfile database connection mysql+pymysql://neutron:$NEUTRON_DBPASS@$HOST_CTL/neutron_ml2
+#
+#	crudini --set $neutronfile nova auth_url http://$HOST_CTL:5000
+#	crudini --set $neutronfile nova auth_type password
+#	crudini --set $neutronfile nova project_domain_name default
+#	crudini --set $neutronfile nova user_domain_name default
+#	crudini --set $neutronfile nova region_name RegionOne
+#	crudini --set $neutronfile nova project_name service
+#	crudini --set $neutronfile nova username nova
+#	crudini --set $neutronfile nova password $NOVA_PASS
+#
+#	crudini --set $neutronfile oslo_concurrency lock_path \$state_path/tmp
+#	crudini --set $neutronfile oslo_policy enforce_new_defaults true
 	
 	chmod 640 $neutronfile
 	chown root:neutron $neutronfile
