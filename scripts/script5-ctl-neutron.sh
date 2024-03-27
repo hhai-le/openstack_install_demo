@@ -15,10 +15,11 @@ neutron_create_domain_project_user_role() {
 
 neutron_db_create () {
 	echo "create neutron DB"
-	cat << EOF | mysql
-	create database neutron_ml2;
-	grant all privileges on neutron_ml2.* to neutron@'localhost' identified by '$NEUTRON_DBPASS'; 
-	grant all privileges on neutron_ml2.* to neutron@'%' identified by '$NEUTRON_DBPASS'; 
+cat << EOF | mysql
+create database neutron_ml2;
+grant all privileges on neutron_ml2.* to neutron@'localhost' identified by '$NEUTRON_DBPASS'; 
+grant all privileges on neutron_ml2.* to neutron@'%' identified by '$NEUTRON_DBPASS'; 
+flush privileges;
 EOF
 }
 

@@ -4,7 +4,8 @@ source config.sh
 
 nova_kvm_install() {
 	echo "install kvm nova packages"
-    apt -y install nova-compute nova-compute-kvm qemu-kvm libvirt-daemon-system libvirt-daemon virtinst bridge-utils libosinfo-bin qemu-system-data
+	apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+    apt install -y nova-compute nova-compute-kvm 
 }
 
 
@@ -101,6 +102,7 @@ EOF
 nova_service () {
 	echo "nova service restart"
 	systemctl restart nova-compute
+	systemctl enable nova-compute
 }
 
 nova_kvm_install

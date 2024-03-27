@@ -31,6 +31,7 @@ nova_create_db () {
 CREATE DATABASE nova;
 GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
 GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY '$NOVA_DBPASS';
+FLUSH PRIVILEGES;
 EOF
 }
 
@@ -40,6 +41,7 @@ nova_api_create_db () {
 CREATE DATABASE nova_api;
 GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
 GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY '$NOVA_DBPASS';
+FLUSH PRIVILEGES;
 EOF
 }
 
@@ -49,6 +51,7 @@ placement_create_db () {
 CREATE DATABASE placement;
 GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'localhost' IDENTIFIED BY '$PLACEMENT_DBPASS';
 GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%' IDENTIFIED BY '$PLACEMENT_DBPASS';
+FLUSH PRIVILEGES;
 EOF
 }
 
@@ -58,6 +61,7 @@ cell_create_db () {
 CREATE DATABASE nova_cell0;
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost' IDENTIFIED BY '$NOVA_DBPASS';
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY '$NOVA_DBPASS';
+FLUSH PRIVILEGES;
 EOF
 }
 
@@ -100,7 +104,7 @@ novncproxy_base_url = http://$HOST_CTL:6080/vnc_auto.html
 server_listen = $HOST_CTL_IP
 server_proxyclient_address = $HOST_CTL_IP
 [glance]
-api_servers = http://openstack0:9292
+api_servers = http://$HOST_CTL:9292
 [oslo_concurrency]
 lock_path = \$state_path/tmp
 [api_database]
@@ -189,22 +193,41 @@ placement_config() {
 	placementfile=/etc/placement/placement.conf
 	placementfilebak=/etc/placement/placement.conf.bak
 	mv $placementfile  $placementfilebak
-	
-	crudini --set $placementfile DEFAULT debug false
+cat > $placementfile << EOF
+[DEFAULT]
+debug = false
+[api]
+auth_strategy = keystone
+[keystone_authtoken]
+www_authenticate_uri = http://$HOST_CTL:5000
+auth_url = http://$HOST_CTL:5000
+memcached_servers = $HOST_CTL:11211
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+project_name = service
+username = placement
+password = $PLACEMENT_PASS
+[placement_database]
+connection = mysql+pymysql://placement:$PLACEMENT_DBPASS@$HOST_CTL/placement
 
-	crudini --set $placementfile api auth_strategy keystone
+EOF
 
-	crudini --set $placementfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
-	crudini --set $placementfile keystone_authtoken auth_url http://$HOST_CTL:5000
-	crudini --set $placementfile keystone_authtoken memcached_servers $HOST_CTL:11211
-	crudini --set $placementfile keystone_authtoken auth_type password
-	crudini --set $placementfile keystone_authtoken project_domain_name default
-	crudini --set $placementfile keystone_authtoken user_domain_name default
-	crudini --set $placementfile keystone_authtoken project_name service
-	crudini --set $placementfile keystone_authtoken username placement
-	crudini --set $placementfile keystone_authtoken password $PLACEMENT_PASS
-
-	crudini --set $placementfile placement_database connection mysql+pymysql://placement:$PLACEMENT_DBPASS@$HOST_CTL/placement
+#	crudini --set $placementfile DEFAULT debug false
+#
+#	crudini --set $placementfile api auth_strategy keystone
+#
+#	crudini --set $placementfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
+#	crudini --set $placementfile keystone_authtoken auth_url http://$HOST_CTL:5000
+#	crudini --set $placementfile keystone_authtoken memcached_servers $HOST_CTL:11211
+#	crudini --set $placementfile keystone_authtoken auth_type password
+#	crudini --set $placementfile keystone_authtoken project_domain_name default
+#	crudini --set $placementfile keystone_authtoken user_domain_name default
+#	crudini --set $placementfile keystone_authtoken project_name service
+#	crudini --set $placementfile keystone_authtoken username placement
+#	crudini --set $placementfile keystone_authtoken password $PLACEMENT_PASS
+#
+#	crudini --set $placementfile placement_database connection mysql+pymysql://placement:$PLACEMENT_DBPASS@$HOST_CTL/placement
 
 	chmod 640 $placementfile
 	chown root:placement $placementfile

@@ -7,14 +7,16 @@ install_rabbitmq() {
     apt install rabbitmq-server -y
     rabbitmqctl add_user $RABBIT_USER $RABBIT_PASS
     rabbitmqctl set_permissions $RABBIT_USER ".*" ".*" ".*"
-    service rabbitmq-server restart
+    systemctl restart rabbitmq-server
+    systemctl enable rabbitmq-server
 }
 install_memcached () {
 	echo "Install Memcached"
 	apt install memcached -y
 	MEMCAHCEFILE=/etc/memcached.conf
 	sed -i "s/-l 127.0.0.1/-l $HOST_CTL_IP/" $MEMCAHCEFILE
-	service memcached restart
+    systemctl restart memcached
+    systemctl enable memcached
 } 
 install_mysql(){
 	echo "Install MariaDB Server"
@@ -24,7 +26,8 @@ install_mysql(){
     crudini --set $mysqlfile mysqld max_connections 500
     crudini --set $mysqlfile mysqld character-set-server utf8mb4
     crudini --set $mysqlfile mysqld collation-server utf8mb4_general_ci
-    service mariadb restart 
+    systemctl restart mariadb
+    systemctl enable mariadb
 }
 install_rabbitmq
 install_memcached

@@ -82,11 +82,13 @@ provider = fernet
 [trust]
 [unified_limit]
 [wsgi]
-
 EOF
 	#crudini --set $keystonefile database connection mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone
 	#crudini --set $keystonefile token provider fernet
 	#crudini --set $keystonefile cache memcache_servers $HOST_CTL_IP:11211
+	
+	chmod 640 $keystonefile
+	chown root:keystone $keystonefile
 }
 keystone_populate_db () {
 	echo "DB Synchronize"
@@ -109,7 +111,8 @@ keystone_config_apache () {
 # Function finalize the installation
 keystone_finalize_install () {
 	echo "Finalize the installation"
-	service apache2 restart
+	systemctl restart apache2
+	systemctl enable apache2
 }
 keystone_create_domain_project_user_role () {
 	export OS_USERNAME=admin
