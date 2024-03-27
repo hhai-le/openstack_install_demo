@@ -15,11 +15,11 @@ keystone_create_db () {
 #GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY '$KEYSTONE_DBPASS';
 #FLUSH PRIVILEGES;
 #EOF
-	cat << EOF | mysql
-	CREATE DATABASE keystone;
-	GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY '$KEYSTONE_DBPASS';
-	GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY '$KEYSTONE_DBPASS';
-	FLUSH PRIVILEGES;
+cat << EOF | mysql
+CREATE DATABASE keystone;
+GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY '$KEYSTONE_DBPASS';
+GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY '$KEYSTONE_DBPASS';
+FLUSH PRIVILEGES;
 EOF
 }
 keystone_install () {
