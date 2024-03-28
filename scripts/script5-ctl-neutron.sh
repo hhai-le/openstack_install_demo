@@ -123,7 +123,7 @@ neutron_ml2_ini () {
 	mv $neutronini  $neutroninibak
 cat > $neutronini << EOF
 [DEFAULT]
-debug = false
+debug = true
 [ml2]
 type_drivers = flat,geneve
 tenant_network_types = geneve

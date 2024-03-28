@@ -199,7 +199,7 @@ placement_config() {
 	mv $placementfile  $placementfilebak
 cat > $placementfile << EOF
 [DEFAULT]
-debug = false
+debug = true
 [api]
 auth_strategy = keystone
 [keystone_authtoken]

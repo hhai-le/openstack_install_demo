@@ -21,7 +21,7 @@ state_path = /var/lib/nova
 enabled_apis = osapi_compute,metadata
 log_dir = /var/log/nova
 transport_url = rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
-#compute_driver = libvirt.LibvirtDriver
+compute_driver = libvirt.LibvirtDriver
 [api]
 auth_strategy = keystone
 [vnc]
@@ -56,8 +56,8 @@ password = $PLACEMENT_PASS
 api_paste_config = /etc/nova/api-paste.ini
 [oslo_policy]
 enforce_new_defaults = true
-#[libvirt]
-#virt_type = kvm
+[libvirt]
+virt_type = kvm
 EOF
 
 #	crudini --set $novafile DEFAULT state_path /var/lib/nova
