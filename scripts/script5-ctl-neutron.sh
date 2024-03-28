@@ -271,3 +271,4 @@ neutron_ovn_metadata_agent
 openvswitch_switch 
 neutron_nova_conf 
 neutron_initial 
+neutron_flat_config

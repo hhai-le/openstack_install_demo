@@ -98,9 +98,13 @@ glance_service() {
 glance_image () {
 	wget http://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img
 	modprobe nbd
-	qemu-nbd --connect=/dev/nbd0 ubuntu-22.04-server-cloudimg-amd64.img
+	qemu-nbd -c /dev/nbd0 ubuntu-22.04-server-cloudimg-amd64.img
 	mount /dev/nbd0p1 /mnt
-
+	sed -i '/^disable_root.*/a ssh_pwauth: true' /mnt/etc/cloud/cloud.cfg
+	sed -i 's/lock_passwd:.*/lock_passwd: False/' /mnt/etc/cloud/cloud.cfg
+	umount /mnt
+	qemu-nbd -d /dev/nbd0 
+	openstack image create "Ubuntu2204" --file ubuntu-22.04-server-cloudimg-amd64.img --disk-format qcow2 --container-format bare --public
 }
 
 glance_create_db
@@ -109,3 +113,4 @@ glance_create_domain_project_user_role
 glance_config
 glance_db_sync
 glance_service
+glance_image
