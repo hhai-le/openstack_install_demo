@@ -102,7 +102,7 @@ auth_strategy = keystone
 enabled = True
 novncproxy_host = $HOST_CTL_IP
 novncproxy_port = 6080
-novncproxy_base_url = http://$HOST_CTL:6080/vnc_auto.html
+novncproxy_base_url = http://$HOST_CTL:6080/vnc_lite.html
 server_listen = $HOST_CTL_IP
 server_proxyclient_address = $HOST_CTL_IP
 [glance]

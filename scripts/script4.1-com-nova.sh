@@ -28,7 +28,9 @@ auth_strategy = keystone
 enabled = True
 server_listen = $(hostname -i)
 server_proxyclient_address = $(hostname -i)
-novncproxy_base_url = http://$HOST_CTL:6080/vnc_auto.html
+novncproxy_host = $(hostname -i)
+novncproxy_port = 6080
+novncproxy_base_url = http://$HOST_CTL:6080/vnc_lite.html
 [glance]
 api_servers = http://$HOST_CTL:9292
 [oslo_concurrency]
