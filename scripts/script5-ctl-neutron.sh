@@ -255,8 +255,8 @@ EOF
 	ovs-vsctl add-br br-$interface_2nd
 	ovs-vsctl add-port br-$interface_2nd $interface_2nd
 	ovs-vsctl set open . external-ids:ovn-bridge-mappings=physnet1:br-$interface_2nd
-	projectID=$(openstack project list | grep service | awk '{print $2}')
 	source /root/admin-openrc
+	projectID=$(openstack project list | grep service | awk '{print $2}')
 	openstack network create --project $projectID --share --provider-network-type flat --provider-physical-network physnet1 sharednet1
 	openstack subnet create subnet1 --network sharednet1 --project $projectID --subnet-range $flat_subnet_range --allocation-pool start=$flat_allocation_pool_start,end=$flat_allocation_pool_end --gateway $flat_gateway --dns-nameserver $flat_dns_nameserver
 }
