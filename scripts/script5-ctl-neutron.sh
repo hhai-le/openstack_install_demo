@@ -51,7 +51,7 @@ transport_url = rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
 [keystone_authtoken]
 www_authenticate_uri = http://$HOST_CTL:5000
 auth_url = http://$HOST_CTL:5000
-memcached_servers = dlp.srv.world:11211
+memcached_servers = $HOST_CTL:11211
 auth_type = password
 project_domain_name = default
 user_domain_name = default
