@@ -36,6 +36,7 @@ neutron_config () {
 cat >> $neutronfile << EOF
 # create new
 [DEFAULT]
+debug = True
 bind_host = $HOST_CTL_IP
 bind_port = 9696
 core_plugin = ml2

@@ -33,6 +33,7 @@ keystone_config () {
 	mv $keystonefile $keystonefilebak
 cat > $keystonefile << EOF
 [DEFAULT]
+debug = True
 log_dir = /var/log/keystone
 [application_credential]
 [assignment]

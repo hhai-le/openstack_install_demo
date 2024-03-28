@@ -34,6 +34,7 @@ glance_config () {
 	mv $glancefile  $glancefilebak
 cat > $glancefile << EOF
 [DEFAULT]
+debug = True
 bind_host = $HOST_CTL_IP
 transport_url = rabbit://$RABBIT_USER:$RABBIT_PASS@$HOST_CTL
 [glance_store]

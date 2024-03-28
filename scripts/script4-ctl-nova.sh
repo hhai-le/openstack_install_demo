@@ -86,6 +86,7 @@ nova_config () {
 	mv $novafile  $novafilebak
 cat > $novafile << EOF
 [DEFAULT]
+debug = True
 osapi_compute_listen = $HOST_CTL_IP
 osapi_compute_listen_port = 8774
 metadata_listen = $HOST_CTL_IP

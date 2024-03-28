@@ -16,6 +16,7 @@ nova_config () {
 	mv $novafile  $novafilebak
 cat > $novafile << EOF
 [DEFAULT]
+debug = True
 state_path = /var/lib/nova
 enabled_apis = osapi_compute,metadata
 log_dir = /var/log/nova
