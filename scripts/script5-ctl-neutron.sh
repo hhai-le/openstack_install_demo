@@ -230,7 +230,7 @@ neutron_nova_conf () {
 neutron_initial () {
 	echo "neutron initial"
 	systemctl restart openvswitch-switch
-	ovs-vsctl add-br br-int
+	#ovs-vsctl add-br br-int
 	ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 	su -s /bin/bash neutron -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head"
 	systemctl restart ovn-central ovn-northd ovn-controller ovn-host

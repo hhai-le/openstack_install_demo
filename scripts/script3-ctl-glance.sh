@@ -100,11 +100,15 @@ glance_image () {
 	wget http://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img
 	modprobe nbd
 	qemu-nbd -c /dev/nbd0 ubuntu-22.04-server-cloudimg-amd64.img
+	sleep 3
 	mount /dev/nbd0p1 /mnt
+	sleep 3
 	sed -i '/^disable_root.*/a ssh_pwauth: true' /mnt/etc/cloud/cloud.cfg
 	sed -i 's/lock_passwd:.*/lock_passwd: False/' /mnt/etc/cloud/cloud.cfg
 	umount /mnt
+	sleep 3
 	qemu-nbd -d /dev/nbd0 
+	sleep 3
 	openstack image create "Ubuntu2204" --file ubuntu-22.04-server-cloudimg-amd64.img --disk-format qcow2 --container-format bare --public
 }
 
