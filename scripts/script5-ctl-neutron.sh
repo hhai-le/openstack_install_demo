@@ -230,15 +230,20 @@ neutron_nova_conf () {
 neutron_initial () {
 	echo "neutron initial"
 	systemctl restart openvswitch-switch
+	sleep 2
 	#ovs-vsctl add-br br-int
 	ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 	su -s /bin/bash neutron -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head"
+	sleep 2
 	systemctl restart ovn-central ovn-northd ovn-controller ovn-host
+	sleep 2
 	ovn-nbctl set-connection ptcp:6641:$HOST_CTL_IP -- set connection . inactivity_probe=60000
 	ovn-sbctl set-connection ptcp:6642:$HOST_CTL_IP -- set connection . inactivity_probe=60000
+	sleep 2
 	ovs-vsctl set open . external-ids:ovn-remote=tcp:$HOST_CTL_IP:6642
 	ovs-vsctl set open . external-ids:ovn-encap-type=geneve
 	ovs-vsctl set open . external-ids:ovn-encap-ip=$HOST_CTL_IP
+	sleep 2
 	systemctl restart neutron-server neutron-ovn-metadata-agent nova-api nova-compute
 }
 
