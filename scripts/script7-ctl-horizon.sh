@@ -21,3 +21,7 @@ EOF
 service_restart () {
     systemctl restart apache2 nova-api
 }
+
+horizon_install
+horizon_config
+service_restart
